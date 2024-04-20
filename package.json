@@ -9,6 +9,7 @@
     "@nx/devkit": "18.3.2",
     "@nx/eslint": "18.3.2",
     "@nx/eslint-plugin": "18.3.2",
+    "@nx/express": "18.3.2",
     "@nx/js": "18.3.2",
     "@nx/playwright": "18.3.2",
     "@nx/react": "18.3.2",
@@ -45,6 +46,7 @@
     "vitest": "^1.3.1"
   },
   "dependencies": {
+    "express": "^4.18.1",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   }
