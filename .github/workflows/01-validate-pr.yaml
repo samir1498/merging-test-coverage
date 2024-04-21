@@ -39,7 +39,9 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: '>=1.19.0'
-      - run: go version
+      - run: |
+          go version
+          go install github.com/cancue/covreport@latest
 
       - uses: nrwl/nx-set-shas@v3
       - run: git branch --track main origin/main
