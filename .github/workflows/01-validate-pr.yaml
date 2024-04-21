@@ -5,6 +5,7 @@ env:
   pnpm_version: 8.15.1
   CI: true
   environment: dev
+  AS_APIKEY: ${{ secrets.AS_APIKEY }}
 
 on:
   workflow_dispatch:
@@ -20,7 +21,7 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    name: Build Job on Dev
+    name: Testing and gnerating reports
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
@@ -65,3 +66,18 @@ jobs:
         shell: bash
         run: |
           pnpm nx run merge-js-reports:generate-js-reports
+
+      - name: Deploy coverage reports
+        id: builddeploy
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AS_APIKEY }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
+          action: 'upload'
+          ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
+          # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
+          app_location: './coverage/final-report' # App source code path
+          skip_app_build: true
+          skip_api_build: true
+          production_branch: 'main'
+          ###### End of Repository/Build Configurations ######
