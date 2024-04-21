@@ -2,6 +2,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+import istanbul from 'vite-plugin-istanbul';
 
 export default defineConfig({
   root: __dirname,
@@ -17,7 +18,7 @@ export default defineConfig({
     host: 'localhost',
   },
 
-  plugins: [react(), nxViteTsPaths()],
+  plugins: [react(), nxViteTsPaths(), istanbul({ requireEnv: false })],
 
   // Uncomment this if you are using workers.
   // worker: {
@@ -40,10 +41,12 @@ export default defineConfig({
     environment: 'jsdom',
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
 
-    reporters: ['json'],
+    reporters: ['default'],
     coverage: {
+      enabled: true,
       reportsDirectory: '../coverage/react-app',
-      provider: 'v8',
+      provider: 'istanbul',
+      reporter: ['json', 'lcovonly'],
     },
   },
 });

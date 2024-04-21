@@ -1,0 +1,3 @@
+mode: set
+merging-test-coverage/goapp/main.go:5.32,8.2 2 1
+merging-test-coverage/goapp/main.go:10.13,12.2 1 0

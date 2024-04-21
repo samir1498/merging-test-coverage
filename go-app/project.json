@@ -18,10 +18,20 @@
       }
     },
     "test": {
-      "executor": "@nx-go/nx-go:test"
+      "executor": "@nx-go/nx-go:test",
+      "options": {
+        "cover": true
+      }
     },
     "lint": {
       "executor": "@nx-go/nx-go:lint"
+    },
+    "test:coverage": {
+      "executor": "nx:run-commands",
+      "options": {
+        // "command": "mkdir -p coverage/go-app && go test -race -json > 'coverage/go-app/coverage.json' -v ./go-app"
+        "command": "go test -v ./go-app -coverprofile=coverage.out &&  gcov2lcov -infile=coverage.out -outfile=coverage.lcov "
+      }
     }
   }
 }
