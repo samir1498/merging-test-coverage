@@ -71,7 +71,7 @@ jobs:
 
       # Existing steps for generating coverage reports
       - name: Generate Coverage Index
-        uses: bash generate-coverage-index.sh
+        run: bash generate-coverage-index.sh
 
       - name: Deploy coverage reports
         id: builddeploy
