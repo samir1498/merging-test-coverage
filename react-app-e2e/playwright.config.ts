@@ -51,7 +51,7 @@ export default defineConfig({
           'apps/front-e2e/project.json',
         ],
         // Directory in which to write coverage reports
-        resultDir: path.join(workspaceRoot, 'coverage/react-app-e2e'),
+        resultDir: path.join(workspaceRoot, 'coverage/js/react-app-e2e'),
         // Configure the reports to generate.
         // The value is an array of istanbul reports, with optional configuration attached.
         reports: [['json'], ['lcovonly']],

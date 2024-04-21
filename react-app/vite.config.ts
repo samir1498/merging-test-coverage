@@ -27,6 +27,7 @@ export default defineConfig({
 
   build: {
     outDir: '../dist/react-app',
+    sourcemap: true,
     reportCompressedSize: true,
     commonjsOptions: {
       transformMixedEsModules: true,
@@ -44,7 +45,7 @@ export default defineConfig({
     reporters: ['default'],
     coverage: {
       enabled: true,
-      reportsDirectory: '../coverage/react-app',
+      reportsDirectory: '../coverage/js/react-app',
       provider: 'istanbul',
       reporter: ['json', 'lcovonly'],
     },
