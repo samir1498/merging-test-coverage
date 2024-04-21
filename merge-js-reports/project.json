@@ -15,7 +15,7 @@
       "executor": "nx:run-commands",
       "dependsOn": ["merge-js-reports"],
       "options": {
-        "command": "pnpm nyc report -t coverage/merged-coverage --report-dir coverage/final-report --reporter=html"
+        "command": "pnpm nyc report -t coverage/merged-coverage --report-dir coverage/final-report --reporter=html && rm -rf coverage/merged-coverage && rm -rf coverage/js"
       }
     }
   }
