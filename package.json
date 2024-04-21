@@ -62,6 +62,7 @@
   },
   "dependencies": {
     "@bgotink/playwright-coverage": "^0.2.2",
+    "@cvrg-report/golang-cover-json": "^0.1.2",
     "axios": "^1.6.0",
     "express": "^4.18.1",
     "istanbul-merge": "^2.0.0",

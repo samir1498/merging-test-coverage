@@ -1,0 +1,42 @@
+name: 'Prepare NodeJS Environement'
+description: 'Install package'
+inputs:
+  node_version:
+    description: 'NodeJS version'
+    default: '20'
+  pnpm_version:
+    description: 'pnpm version'
+    default: '8.15.3'
+
+runs:
+  using: 'composite'
+
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node_version }}
+    - uses: pnpm/action-setup@v3
+      name: Install pnpm
+      with:
+        version: ${{ env.pnpm_version }}
+        run_install: false
+    - name: Restore cached npm dependencies
+      id: cache-dependencies-restore
+      uses: actions/cache/restore@v3
+      with:
+        path: |
+          node_modules
+          ~/.cache/Cypress # needed for the Cypress binary
+        key: npm-dependencies-${{ hashFiles('pnpm-lock.yaml') }}
+    - name: install dependencies
+      shell: bash
+      run: |
+        pnpm install --frozen-lockfile
+    - name: Cache npm dependencies
+      id: cache-dependencies-save
+      uses: actions/cache/save@v3
+      with:
+        path: |
+          node_modules
+          ~/.cache/Cypress # needed for the Cypress binary
+        key: ${{ steps.cache-dependencies-restore.outputs.cache-primary-key }}
