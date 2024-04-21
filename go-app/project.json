@@ -24,7 +24,7 @@
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "mkdir -p coverage/go-app && go test -coverprofile coverage/go-app/cover.prof ./go-app && covreport -i ./coverage/go-app/cover.prof -o ./coverage/go-app/index.html -cutlines 70,40"
+        "command": "mkdir -p coverage/go-app && go test -coverprofile coverage/go-app/cover.prof ./go-app && covreport -i ./coverage/go-app/cover.prof -o ./coverage/go-app/index.html -cutlines 70,40 && gocov test ./go-app | gocov report"
       }
     }
   }
