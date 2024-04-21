@@ -8,7 +8,14 @@
     "merge-js-reports": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "pnpm nyc report -t coverage/js --report-dir coverage/final-report --reporter=html"
+        "command": "pnpm istanbul-merge --out coverage/merged-coverage/coverage-final.json coverage/js/**/coverage-final.json"
+      }
+    },
+    "generate-js-reports": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["merge-js-reports"],
+      "options": {
+        "command": "pnpm nyc report -t coverage/merged-coverage --report-dir coverage/final-report --reporter=html"
       }
     }
   }

@@ -47,14 +47,14 @@ export default defineConfig({
         // - or part of the code is generated
         // - or if you're running into any of the other many reasons people have for excluding files
         exclude: [
-          'apps/front-e2e/.eslintrc.json, apps/front-e2e/playwright.config.ts',
-          'apps/front-e2e/project.json',
+          'react-app-e2e/.eslintrc.json, react-app-e2e/playwright.config.ts',
+          'react-app-e2e/project.json',
         ],
         // Directory in which to write coverage reports
         resultDir: path.join(workspaceRoot, 'coverage/js/react-app-e2e'),
         // Configure the reports to generate.
         // The value is an array of istanbul reports, with optional configuration attached.
-        reports: [['json'], ['lcovonly']],
+        reports: [['json']],
       },
     ],
   ],
