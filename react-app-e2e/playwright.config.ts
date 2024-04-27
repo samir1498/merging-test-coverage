@@ -54,7 +54,18 @@ export default defineConfig({
         resultDir: path.join(workspaceRoot, 'coverage/js/react-app-e2e'),
         // Configure the reports to generate.
         // The value is an array of istanbul reports, with optional configuration attached.
-        reports: [['json'], ['text'], ['text-summary'], ['html'], ['lcovonly']],
+        reports: [
+          ['json'],
+          ['text'],
+          ['text-summary'],
+          ['html'],
+          [
+            'lcovonly',
+            {
+              file: 'coverage.lcov',
+            },
+          ],
+        ],
       },
     ],
   ],
