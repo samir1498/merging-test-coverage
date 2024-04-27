@@ -2,7 +2,6 @@ import { defineConfig, devices } from '@playwright/test';
 import { nxE2EPreset } from '@nx/playwright/preset';
 
 import { workspaceRoot } from '@nx/devkit';
-import path = require('path');
 
 // For CI, you may want to set BASE_URL to the deployed application.
 const baseURL = process.env['BASE_URL'] || 'http://localhost:4200';
@@ -23,47 +22,12 @@ export default defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
   },
-
-  // Run all tests in parallel.
-  fullyParallel: true,
-
-  // Fail the build on CI if you accidentally left test.only in the source code.
-  forbidOnly: !!process.env.CI,
-
-  // Retry on CI only.
-  retries: process.env.CI === 'true' ? 2 : 0,
-
-  // Opt out of parallel tests on CI.
-  workers: process.env.CI === 'true' ? 1 : undefined,
-  reporter: [
-    ['list'],
-    [
-      '@bgotink/playwright-coverage',
-      /** @type {import('@bgotink/playwright-coverage').CoverageReporterOptions} */ {
-        // Path to the root files should be resolved from, most likely your repository root
-        sourceRoot: __dirname,
-        // Files to ignore in coverage, useful
-        // - if you're testing the demo app of a component library and want to exclude the demo sources
-        // - or part of the code is generated
-        // - or if you're running into any of the other many reasons people have for excluding files
-        exclude: [
-          'react-app-e2e/.eslintrc.json, react-app-e2e/playwright.config.ts',
-          'react-app-e2e/project.json',
-        ],
-        // Directory in which to write coverage reports
-        resultDir: path.join(workspaceRoot, 'coverage/js/react-app-e2e'),
-        // Configure the reports to generate.
-        // The value is an array of istanbul reports, with optional configuration attached.
-        reports: [['json'], ['text'], ['text-summary'], ['html']],
-      },
-    ],
-  ],
-
+  reporter: [['list'], ['html', { open: 'never' }]],
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'pnpm exec nx run react-app:serve',
+    command: 'pnpm exec nx serve react-app-2',
     url: 'http://localhost:4200',
-    reuseExistingServer: process.env.CI !== 'true',
+    reuseExistingServer: !process.env.CI,
     cwd: workspaceRoot,
   },
   projects: [
