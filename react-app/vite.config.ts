@@ -47,7 +47,7 @@ export default defineConfig({
       enabled: true,
       reportsDirectory: '../coverage/js/react-app',
       provider: 'istanbul',
-      reporter: ['json', 'text', 'text-summary'],
+      reporter: ['json', 'text', 'text-summary', 'lcovonly'],
     },
   },
 });
