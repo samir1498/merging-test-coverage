@@ -49,9 +49,10 @@ export default defineConfig({
         exclude: [
           'react-app-e2e/.eslintrc.json, react-app-e2e/playwright.config.ts',
           'react-app-e2e/project.json',
+          '**/node_modules/**',
         ],
         // Directory in which to write coverage reports
-        resultDir: path.join(workspaceRoot, 'coverage/js/react-app-e2e'),
+        resultDir: path.join(workspaceRoot, 'coverage/js/react-app-2-e2e'),
         // Configure the reports to generate.
         // The value is an array of istanbul reports, with optional configuration attached.
         reports: [
@@ -68,12 +69,11 @@ export default defineConfig({
       },
     ],
   ],
-
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'pnpm exec nx run react-app:serve',
+    command: 'pnpm exec nx serve react-app-2',
     url: 'http://localhost:4200',
-    reuseExistingServer: process.env.CI !== 'true',
+    reuseExistingServer: !process.env.CI,
     cwd: workspaceRoot,
   },
   projects: [

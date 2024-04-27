@@ -6,7 +6,7 @@ import istanbul from 'vite-plugin-istanbul';
 
 export default defineConfig({
   root: __dirname,
-  cacheDir: '../node_modules/.vite/react-app',
+  cacheDir: '../node_modules/.vite/react-app-2',
 
   server: {
     port: 4200,
@@ -26,8 +26,7 @@ export default defineConfig({
   // },
 
   build: {
-    outDir: '../dist/react-app',
-    sourcemap: true,
+    outDir: '../dist/react-app-2',
     reportCompressedSize: true,
     commonjsOptions: {
       transformMixedEsModules: true,
@@ -45,9 +44,9 @@ export default defineConfig({
     reporters: ['default'],
     coverage: {
       enabled: true,
-      reportsDirectory: '../coverage/js/react-app',
+      reportsDirectory: '../coverage/js/react-app-2',
       provider: 'istanbul',
-      reporter: ['json', 'text', 'text-summary', 'lcovonly'],
+      reporter: ['json', 'text', 'text-summary'],
     },
   },
 });

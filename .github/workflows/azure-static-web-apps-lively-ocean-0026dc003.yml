@@ -1,49 +1,97 @@
-name: Azure Static Web Apps CI/CD
+name: validation
+
+env:
+  node_version: 20
+  pnpm_version: 8.15.1
+  CI: true
+  environment: dev
+  AS_APIKEY: ${{ secrets.AS_APIKEY }}
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
   pull_request:
-    types: [opened, synchronize, reopened, closed]
     branches:
+      - dev
       - main
-
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - closed
 jobs:
-  build_and_deploy_job:
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+  validate:
     runs-on: ubuntu-latest
-    name: Build and Deploy Job
+    name: Testing and gnerating reports
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout your repository using git
+        uses: actions/checkout@v4.1.0
         with:
-          submodules: true
-          lfs: false
-      - name: Build And Deploy
+          fetch-depth: 0
+
+      - name: 'Install NodeJs'
+        uses: ./.github/actions/install
+        with:
+          node_version: ${{ env.node_version }}
+          pnpm_version: ${{ env.pnpm_version }}
+      - name: 'Install Go'
+        uses: actions/setup-go@v5
+        with:
+          go-version: '>=1.19.0'
+      - run: |
+          go version
+          go install github.com/cancue/covreport@latest
+          go install github.com/axw/gocov/gocov@latest
+          go install github.com/jandelgado/gcov2lcov@latest
+
+      - uses: nrwl/nx-set-shas@v3
+      - run: git branch --track main origin/main
+
+      - name: Nx - Unit Tests
+        shell: bash
+        run: |
+          npx nx affected --target=test --parallel 1
+
+      - name: Setup playwirght
+        uses: microsoft/playwright-github-action@v1
+
+      - name: Nx - e2e Tests
+        env:
+          CI: ${{ env.CI }}
+        shell: bash
+        run: |
+          pnpm exec playwright install
+          pnpm nx affected --target=e2e --parallel 1
+
+      - name: Upload coverage reports to Codecov with GitHub Action
+        uses: codecov/codecov-action@v4.2.0
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Nx - Generate Test Report
+        env:
+          CI: ${{ env.CI }}
+        shell: bash
+        run: |
+          pnpm nx run merge-js-reports:generate-js-reports
+
+      # Existing steps for generating coverage reports
+      - name: Generate Coverage Index
+        run: bash generate-coverage-index.sh
+
+      - name: Deploy coverage reports
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_LIVELY_OCEAN_0026DC003 }}
+          azure_static_web_apps_api_token: ${{ secrets.AS_APIKEY }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
           action: 'upload'
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: '/coverage/final-report' # App source code path
-          skip_api_build: true
+          app_location: './coverage' # App source code path
           skip_app_build: true
-          ###### End of Repository/Build Configurations ######
+          skip_api_build: true
+          production_branch: 'main'
 
-  close_pull_request_job:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
-    runs-on: ubuntu-latest
-    name: Close Pull Request Job
-    steps:
-      - name: Close Pull Request
-        id: closepullrequest
-        uses: Azure/static-web-apps-deploy@v1
-        with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_LIVELY_OCEAN_0026DC003 }}
-          action: 'close'
-          app_location: '/coverage/final-report'
-          skip_api_build: true
-          skip_app_build: true
+          ###### End of Repository/Build Configurations ######
