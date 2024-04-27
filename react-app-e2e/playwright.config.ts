@@ -62,7 +62,7 @@ export default defineConfig({
           [
             'lcovonly',
             {
-              file: 'coverage.lcov',
+              file: 'lcov.info',
             },
           ],
         ],
