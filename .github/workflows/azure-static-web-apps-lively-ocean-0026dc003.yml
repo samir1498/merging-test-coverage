@@ -43,6 +43,7 @@ jobs:
           go version
           go install github.com/cancue/covreport@latest
           go install github.com/axw/gocov/gocov@latest
+          go install github.com/jandelgado/gcov2lcov@latest
 
       - uses: nrwl/nx-set-shas@v3
       - run: git branch --track main origin/main
