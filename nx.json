@@ -68,6 +68,12 @@
         "style": "css",
         "linter": "eslint"
       }
+    },
+    "@nx/angular:application": {
+      "e2eTestRunner": "playwright",
+      "linter": "eslint",
+      "style": "css",
+      "unitTestRunner": "jest"
     }
   },
   "targetDefaults": {
@@ -75,6 +81,11 @@
       "inputs": ["production", "^production"]
     },
     "@nx/esbuild:esbuild": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
+    },
+    "@angular-devkit/build-angular:application": {
       "cache": true,
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
