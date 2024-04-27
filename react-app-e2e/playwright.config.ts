@@ -58,7 +58,6 @@ export default defineConfig({
           ['json'],
           ['text'],
           ['text-summary'],
-          ['html'],
           [
             'lcovonly',
             {
